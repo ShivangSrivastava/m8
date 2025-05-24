@@ -14,6 +14,8 @@ type ApplyService struct {
 	AppliedName []string
 }
 
+// Apply processes all available "up" migrations, filters out those already applied,
+// and applies the remaining ones in order using the provided MigrationRepo.
 func (a *ApplyService) Apply() error {
 	all, err := a.Loader.LoadMigrations()
 	if err != nil {

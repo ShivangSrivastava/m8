@@ -21,6 +21,10 @@ type FileLoader struct {
 	Direction Direction
 }
 
+// LoadMigrations reads all migration files from the filesystem in the specified direction (up/down).
+// It assumes migration files follow a naming pattern like `<version>_<name>.up.sql` or `.down.sql`.
+// This function sorts the files to ensure they are applied in the correct order,
+// extracts the version from the filename, and returns a list of structured migrations.
 func (f *FileLoader) LoadMigrations() ([]core.Migration, error) {
 	pattern := "*.up.sql"
 	if f.Direction == Down {

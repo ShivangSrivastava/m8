@@ -15,6 +15,17 @@ import (
 	_ "github.com/lib/pq"
 )
 
+// Up connects to the PostgreSQL database, loads unapplied "up" migrations from the filesystem,
+// and applies them in order using the ApplyService.
+//
+// It builds the connection string from environment variables for flexibility and portability,
+// loads migrations from the "migrations" directory, and uses the ApplyService to handle application logic.
+//
+// This function acts as the main CLI entry point for migrating a database forward,
+// encapsulating the full process from environment setup to file parsing and database execution.
+//
+// Displaying applied migration names (if any) gives immediate feedback to the user,
+// and clear fatal logging ensures the tool fails fast and visibly in case of misconfiguration or error.
 func Up(cmd *cobra.Command, args []string) error {
 	err := godotenv.Load()
 	if err != nil {

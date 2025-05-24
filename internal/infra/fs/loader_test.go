@@ -8,6 +8,11 @@ import (
 	"github.com/ShivangSrivastava/m8/internal/infra/fs"
 )
 
+// TestLoadMigrations verifies that FileLoader correctly loads both up and down migration files from disk.
+// It creates mock migration files in a temporary directory to simulate real input,
+// ensuring that the loader reads the correct direction based on configuration,
+// parses filenames to extract the correct version,
+// and returns non-empty, valid migration entries.
 func TestLoadMigrations(t *testing.T) {
 	dir := t.TempDir()
 	version := "20250524160302"

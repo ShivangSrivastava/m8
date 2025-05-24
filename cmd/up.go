@@ -7,6 +7,7 @@ import (
 	_ "github.com/lib/pq"
 )
 
+// upCmd defines the CLI command that triggers applying all pending "up" migrations to the database.
 var upCmd = &cobra.Command{
 	Use:   "up",
 	Short: "Apply all pending database migrations",

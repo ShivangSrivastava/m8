@@ -11,6 +11,9 @@ type DBRepo struct {
 	DB *sql.DB
 }
 
+// ensureTable creates the schema_migrations table if it doesn't exist.
+// This guarantees that the migration tracking infrastructure is present before any operations.
+// Doing this lazily on-demand avoids requiring manual setup and simplifies usage.
 func (p *DBRepo) ensureTable() error {
 	_, err := p.DB.Exec(`
 		CREATE TABLE IF NOT EXISTS schema_migrations (
@@ -20,6 +23,10 @@ func (p *DBRepo) ensureTable() error {
 	return err
 }
 
+// GetAppliedMigrations returns all migrations recorded as applied in the database,
+// sorted by their applied timestamp to preserve the original application order.
+// This information is critical for the system to know which migrations to skip,
+// enabling idempotent migration application and safe rollbacks.
 func (p *DBRepo) GetAppliedMigrations() ([]core.Migration, error) {
 	if err := p.ensureTable(); err != nil {
 		return nil, err
@@ -44,6 +51,10 @@ func (p *DBRepo) GetAppliedMigrations() ([]core.Migration, error) {
 	return result, nil
 }
 
+// ApplyMigration runs the migration’s UpSQL inside a transaction to ensure atomicity.
+// It records the migration version in schema_migrations upon success,
+// so future runs can detect it as applied and avoid reapplying.
+// Using transactions protects the database from partial or corrupted states in case of failure.
 func (p *DBRepo) ApplyMigration(m core.Migration) error {
 	tx, err := p.DB.Begin()
 	if err != nil {
