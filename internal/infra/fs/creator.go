@@ -6,11 +6,11 @@ import (
 	"path/filepath"
 )
 
-type FileCreater struct {
+type FileCreator struct {
 	Dir string
 }
 
-func (f *FileCreater) CreateMigrations(version, name string) error {
+func (f *FileCreator) CreateMigrations(version, name string) error {
 	migrationName := fmt.Sprintf("%s_%s", version, name)
 	upFile, downFile := migrationName+".up.sql", migrationName+".down.sql"
 

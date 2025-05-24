@@ -9,7 +9,7 @@ import (
 )
 
 func Make(cmd *cobra.Command, args []string) error {
-	creator := &fs.FileCreater{Dir: "migrations"}
+	creator := &fs.FileCreator{Dir: "migrations"}
 	service := &app.CreateService{
 		Name:    args[0],
 		Creator: creator,

@@ -11,7 +11,7 @@ import (
 func TestCreateMigrations(t *testing.T) {
 	dir := t.TempDir()
 
-	creator := &fs.FileCreater{dir}
+	creator := &fs.FileCreator{dir}
 
 	version := "20250524151203"
 	name := "test_migrations"
