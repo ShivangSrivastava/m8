@@ -8,6 +8,10 @@ import (
 	"github.com/ShivangSrivastava/m8/internal/infra/fs"
 )
 
+// TestCreateMigrations verifies that CreateMigrations correctly generates the expected
+// .up.sql and .down.sql files in the given directory. It ensures that file naming follows
+// the version_name pattern and that files are physically created on disk. This test guards
+// against regressions in file output logic and naming conventions.
 func TestCreateMigrations(t *testing.T) {
 	dir := t.TempDir()
 

@@ -5,6 +5,9 @@ import (
 	"github.com/spf13/cobra"
 )
 
+// makeCmd defines the CLI command for generating new SQL migration files.
+// It ensures a migration name is provided and delegates execution to the cli.Make handler.
+// This command integrates with the root command to expose migration creation functionality.
 var makeCmd = &cobra.Command{
 	Use:   "make [name]",
 	Short: "Create new `.up.sql` and `.down.sql` files",
