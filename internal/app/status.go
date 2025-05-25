@@ -2,16 +2,19 @@ package app
 
 type Status string
 
+// Defines migration states: "applied" and "pending".
 const (
 	Pending Status = "pending"
 	Applied Status = "applied"
 )
 
+// `MigrationStatus` pairs a migration's name with its current status.
 type MigrationStatus struct {
 	Status Status
 	Name   string
 }
 
+// `GetStatus` compares loaded vs applied migrations to return a full status list.
 func (a *ApplyService) GetStatus() ([]MigrationStatus, error) {
 	all, err := a.Loader.LoadMigrations()
 	if err != nil {

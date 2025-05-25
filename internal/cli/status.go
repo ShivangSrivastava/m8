@@ -14,6 +14,9 @@ import (
 	"github.com/spf13/cobra"
 )
 
+// Loads DB connection and migration files for status inspection.
+// Uses ApplyService to check which migrations are applied or pending.
+// Prints status line-by-line with checkmarks for applied ones.
 func Status(cmd *cobra.Command, args []string) error {
 	err := godotenv.Load()
 	if err != nil {

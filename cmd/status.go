@@ -7,8 +7,8 @@ import (
 	_ "github.com/lib/pq"
 )
 
-// This command is part of the migration tool’s rollback capability,
-// allowing users to safely undo the latest schema change.
+// Defines the `status` CLI command to show migration state.
+// Binds to `cli.Status` to run logic and print applied/pending migrations.
 var statusCmd = &cobra.Command{
 	Use:   "status",
 	Short: "Status of all applied and pending migrations",
@@ -17,8 +17,7 @@ var statusCmd = &cobra.Command{
 	},
 }
 
-// Registering downCmd in init ensures it becomes part of the CLI interface
-// without requiring manual invocation elsewhere.
+// Registers the command to the root so it's available in CLI.
 func init() {
 	rootCmd.AddCommand(statusCmd)
 }
