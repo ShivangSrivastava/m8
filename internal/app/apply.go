@@ -46,6 +46,9 @@ func (a *ApplyService) Apply() error {
 	return nil
 }
 
+// Reverts the most recently applied migration using its version.
+// Loads the corresponding .down.sql script before execution.
+// Tracks the reverted migration name for display or logging.
 func (a *ApplyService) Revert() error {
 	latest, err := a.Repo.GetLatestMigration()
 	if err != nil {
@@ -59,5 +62,4 @@ func (a *ApplyService) Revert() error {
 
 	a.RevertedMigration = latest.Name
 	return a.Repo.RevertMigration(latest)
-
 }

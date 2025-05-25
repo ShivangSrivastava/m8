@@ -15,6 +15,9 @@ import (
 	_ "github.com/lib/pq"
 )
 
+// Rolls back the latest applied migration by loading its .down.sql file.
+// Ensures database connection and migration components are properly wired.
+// Prints the reverted migration name for user feedback.
 func Down(cmd *cobra.Command, args []string) error {
 	err := godotenv.Load()
 	if err != nil {

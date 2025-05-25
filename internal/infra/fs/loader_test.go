@@ -52,6 +52,9 @@ func TestLoadMigrations(t *testing.T) {
 	}
 }
 
+// Creates a temporary down migration file to simulate a real revert case.
+// Verifies LoadMigration reads correct version, name, and SQL content.
+// Ensures DownSQL matches expected value from the test file.
 func TestLoadMigration(t *testing.T) {
 	dir := t.TempDir()
 	version := "20250524160302"
@@ -60,7 +63,7 @@ func TestLoadMigration(t *testing.T) {
 	filePath := filepath.Join(dir, filename)
 	content := "DROP TABLE cars;"
 
-	if err := os.WriteFile(filePath, []byte(content), 0644); err != nil {
+	if err := os.WriteFile(filePath, []byte(content), 0o644); err != nil {
 		t.Fatalf("Failed to write migration file: %v", err)
 	}
 

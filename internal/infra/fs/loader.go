@@ -32,7 +32,6 @@ func (f *FileLoader) LoadMigrations() ([]core.Migration, error) {
 	}
 
 	files, err := filepath.Glob(filepath.Join(f.Dir, pattern))
-
 	if err != nil {
 		return nil, err
 	}
@@ -67,6 +66,9 @@ func (f *FileLoader) LoadMigrations() ([]core.Migration, error) {
 	return migrations, nil
 }
 
+// LoadMigration loads a specific down migration file by version.
+// Reads the file content and returns a Migration with DownSQL.
+// Used during revert to get the rollback SQL for the latest version.
 func (f *FileLoader) LoadMigration(version string) (core.Migration, error) {
 	pattern := version + "*.down.sql"
 	files, err := filepath.Glob(filepath.Join(f.Dir, pattern))

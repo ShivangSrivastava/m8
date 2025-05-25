@@ -52,6 +52,9 @@ func (d *DBRepo) GetAppliedMigrations() ([]core.Migration, error) {
 	return result, nil
 }
 
+// GetLatestMigration fetches the most recently applied migration.
+// Used for determining which migration to revert in `down`.
+// Returns error if no migrations have been applied yet.
 func (d *DBRepo) GetLatestMigration() (core.Migration, error) {
 	if err := d.ensureTable(); err != nil {
 		return core.Migration{}, err
@@ -102,6 +105,9 @@ func (d *DBRepo) ApplyMigration(m core.Migration) error {
 	return tx.Commit()
 }
 
+// RevertMigration rolls back the latest migration using DownSQL.
+// Removes its record from schema_migrations to mark it as unapplied.
+// Ensures database state consistency with transaction safety.
 func (d *DBRepo) RevertMigration(m core.Migration) error {
 	tx, err := d.DB.Begin()
 	if err != nil {
