@@ -51,3 +51,33 @@ func TestLoadMigrations(t *testing.T) {
 		t.Errorf("Expected: %s, Found: %s", version, downMigrFiles[0].Version)
 	}
 }
+
+func TestLoadMigration(t *testing.T) {
+	dir := t.TempDir()
+	version := "20250524160302"
+	name := "test_loader"
+	filename := version + "_" + name + ".down.sql"
+	filePath := filepath.Join(dir, filename)
+	content := "DROP TABLE cars;"
+
+	if err := os.WriteFile(filePath, []byte(content), 0644); err != nil {
+		t.Fatalf("Failed to write migration file: %v", err)
+	}
+
+	loader := &fs.FileLoader{Dir: dir}
+
+	migration, err := loader.LoadMigration(version)
+	if err != nil {
+		t.Fatalf("LoadMigration returned error: %v", err)
+	}
+
+	if migration.Version != version {
+		t.Errorf("Expected version %s, got %s", version, migration.Version)
+	}
+	if migration.Name != filename {
+		t.Errorf("Expected name %s, got %s", filename, migration.Name)
+	}
+	if migration.DownSQL != content {
+		t.Errorf("Expected content %q, got %q", content, migration.DownSQL)
+	}
+}
