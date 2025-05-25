@@ -32,6 +32,7 @@ func (f *FileLoader) LoadMigrations() ([]core.Migration, error) {
 	}
 
 	files, err := filepath.Glob(filepath.Join(f.Dir, pattern))
+
 	if err != nil {
 		return nil, err
 	}
@@ -64,4 +65,24 @@ func (f *FileLoader) LoadMigrations() ([]core.Migration, error) {
 	}
 
 	return migrations, nil
+}
+
+func (f *FileLoader) LoadMigration(version string) (core.Migration, error) {
+	pattern := version + "*.down.sql"
+	files, err := filepath.Glob(filepath.Join(f.Dir, pattern))
+	if err != nil {
+		return core.Migration{}, err
+	}
+
+	file := files[0]
+	content, err := os.ReadFile(file)
+	if err != nil {
+		return core.Migration{}, err
+	}
+	result := core.Migration{
+		Name:    filepath.Base(file),
+		Version: version,
+		DownSQL: string(content),
+	}
+	return result, nil
 }

@@ -18,6 +18,7 @@ type Migration struct {
 // making it easier to test, extend, or swap out persistence mechanisms (e.g., PostgreSQL, file, memory).
 type MigrationRepo interface {
 	GetAppliedMigrations() ([]Migration, error)
+	GetLatestMigration() (Migration, error)
 	ApplyMigration(Migration) error
-	RevertMigration() error
+	RevertMigration(Migration) error
 }

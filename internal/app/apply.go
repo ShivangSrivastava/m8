@@ -6,12 +6,14 @@ import (
 
 type MigrationLoader interface {
 	LoadMigrations() ([]core.Migration, error)
+	LoadMigration(version string) (core.Migration, error)
 }
 
 type ApplyService struct {
-	Repo        core.MigrationRepo
-	Loader      MigrationLoader
-	AppliedName []string
+	Repo              core.MigrationRepo
+	Loader            MigrationLoader
+	AppliedName       []string
+	RevertedMigration string
 }
 
 // Apply processes all available "up" migrations, filters out those already applied,
@@ -42,4 +44,20 @@ func (a *ApplyService) Apply() error {
 		}
 	}
 	return nil
+}
+
+func (a *ApplyService) Revert() error {
+	latest, err := a.Repo.GetLatestMigration()
+	if err != nil {
+		return err
+	}
+
+	latest, err = a.Loader.LoadMigration(latest.Version)
+	if err != nil {
+		return err
+	}
+
+	a.RevertedMigration = latest.Name
+	return a.Repo.RevertMigration(latest)
+
 }
